@@ -1,0 +1,19 @@
+{
+  "name": "jaldrishti-platform",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AI + GIS Watershed Intelligence & Field Evidence Platform (SIH26015)",
+  "scripts": {
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
+    "dev": "npm --prefix frontend run dev"
+  },
+  "keywords": [
+    "watershed",
+    "gis",
+    "earth-observation",
+    "sih26015",
+    "remote-sensing"
+  ],
+  "author": "Jaldrishti Team",
+  "license": "MIT"
+}
