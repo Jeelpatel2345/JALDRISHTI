@@ -109,6 +109,9 @@ export const EvidencePage: React.FC = () => {
                     src={ev.image_url}
                     alt="Field evidence"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                    }}
                   />
                   <div className="absolute top-2.5 right-2.5">
                     {ev.is_verified ? (
@@ -283,6 +286,9 @@ export const EvidencePage: React.FC = () => {
               src={selectedEvidence.image_url}
               alt="High resolution inspect"
               className="w-full rounded-xl aspect-video object-cover border border-slate-200"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+              }}
             />
             <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
               <div>

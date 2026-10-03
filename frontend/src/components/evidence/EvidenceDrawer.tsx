@@ -20,6 +20,19 @@ interface EvidenceDrawerProps {
   onActionComplete?: () => void;
 }
 
+const getStructureImage = (structureType?: string, customUrl?: string): string => {
+  if (customUrl && customUrl.startsWith('/images/')) return customUrl;
+  const s = (structureType || '').toLowerCase();
+  if (s.includes('check dam') || s.includes('nala bund')) return '/images/check_dam.svg';
+  if (s.includes('chauka') || s.includes('grassland')) return '/images/chauka_system.svg';
+  if (s.includes('johad')) return '/images/johad.svg';
+  if (s.includes('percolation tank')) return '/images/percolation_tank.svg';
+  if (s.includes('contour') || s.includes('trench')) return '/images/contour_trench.svg';
+  if (s.includes('farm pond') || s.includes('khet talab') || s.includes('pond')) return '/images/farm_pond.svg';
+  if (s.includes('spring')) return '/images/spring_chamber.svg';
+  return '/images/check_dam.svg';
+};
+
 export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
   isOpen,
   onClose,
@@ -36,6 +49,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
   const latestEvidence = intervention.field_evidence?.[0];
   const oa = intervention.outcome_assessment;
   const isDistanceFlagged = latestEvidence && latestEvidence.distance_to_asset_m > 50.0;
+  const displayImage = getStructureImage(intervention.structure_type, latestEvidence?.image_url);
 
   const handleAction = async (action: 'VERIFIED' | 'REJECTED' | 'REQUEST_MORE') => {
     setIsVerifying(true);
@@ -129,9 +143,12 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
                 {/* Photo Display Card */}
                 <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 relative aspect-video shadow-inner group">
                   <img
-                    src={latestEvidence?.image_url || 'https://images.unsplash.com/photo-1584444976722-10f76c38260b?auto=format&fit=crop&w=1200&q=80'}
+                    src={displayImage}
                     alt={intervention.structure_type}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                    }}
                   />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white text-xs flex items-center justify-between">
                     <div>

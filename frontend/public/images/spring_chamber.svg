@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyHimalaya" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="220" fill="url(#skyHimalaya)"/>
+
+  <!-- Garhwal Himalayan peaks -->
+  <polygon points="100,220 250,90 400,220" fill="#e2e8f0"/>
+  <polygon points="350,220 500,70 650,220" fill="#cbd5e1"/>
+  <polygon points="550,220 680,110 800,220" fill="#e2e8f0"/>
+
+  <!-- Mountain Spring slope -->
+  <polygon points="0,500 0,220 800,220 800,500" fill="#15803d"/>
+
+  <!-- Spring Masonry Chamber Box -->
+  <rect x="320" y="310" width="160" height="110" rx="8" fill="#64748b" stroke="#334155" stroke-width="4"/>
+  <polygon points="300,310 400,260 500,310" fill="#475569" stroke="#1e293b" stroke-width="3"/>
+
+  <!-- Crystal Clear Spring Water Discharge Pipe -->
+  <rect x="385" y="370" width="30" height="15" fill="#334155"/>
+  <path d="M400,385 C400,430 420,460 480,500" stroke="#38bdf8" stroke-width="8" fill="none"/>
+
+  <!-- Recharge Infiltration Trench -->
+  <ellipse cx="400" cy="460" rx="140" ry="30" fill="#0284c7" opacity="0.8"/>
+
+  <!-- Pine Trees -->
+  <polygon points="150,260 170,300 130,300" fill="#14532d"/>
+  <polygon points="150,280 180,330 120,330" fill="#14532d"/>
+  <polygon points="650,250 670,290 630,290" fill="#14532d"/>
+  <polygon points="650,270 680,320 620,320" fill="#14532d"/>
+
+  <!-- Forensic Badge Overlay -->
+  <rect x="25" y="25" width="360" height="58" rx="12" fill="#0f172a" fill-opacity="0.85"/>
+  <text x="42" y="48" fill="#38bdf8" font-family="monospace" font-size="13" font-weight="bold">SPRING RECHARGE CHAMBER</text>
+  <text x="42" y="68" fill="#94a3b8" font-family="sans-serif" font-size="11">Tehri Garhwal (Uttarakhand) • Perennial Spring Rejuvenated</text>
+</svg>

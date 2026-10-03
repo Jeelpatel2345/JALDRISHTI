@@ -381,7 +381,7 @@ export const api = {
         },
         after_window: {
           period: 'Oct 2023 to Dec 2023',
-          image_url: 'https://images.unsplash.com/photo-1584444976722-10f76c38260b?auto=format&fit=crop&w=1200&q=80',
+          image_url: '/images/check_dam.svg',
           ndvi: 0.385,
           mndwi: 0.080
         },

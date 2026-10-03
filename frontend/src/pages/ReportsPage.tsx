@@ -148,9 +148,12 @@ export const ReportsPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             <div className="aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
               <img
-                src={report?.field_evidence[0]?.image_url || 'https://images.unsplash.com/photo-1584444976722-10f76c38260b?auto=format&fit=crop&w=1200&q=80'}
+                src={report?.field_evidence[0]?.image_url || '/images/check_dam.svg'}
                 alt="Structure proof"
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                }}
               />
             </div>
             <div className="sm:col-span-2 space-y-1.5 text-xs text-slate-700">
