@@ -6,6 +6,18 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
+
+  React.useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {
+        // Handled silently if autoplay restricted
+      });
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col selection:bg-[#0E8A42] selection:text-white">
       {/* Top Government Navigation */}
@@ -53,18 +65,20 @@ export const LandingPage: React.FC = () => {
         {/* Cinematic Water & Dam Video Background */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
             poster="/images/real/sardar_sarovar_dam.jpg"
-            className="w-full h-full object-cover opacity-30 filter brightness-90 contrast-110"
+            className="w-full h-full object-cover opacity-65 filter brightness-105 contrast-115 scale-105 transition-opacity duration-1000"
           >
+            <source src="/videos/dam_water.mp4" type="video/mp4" />
             <source src="/videos/dam_water.webm" type="video/webm" />
           </video>
-          {/* Multi-stage High-Contrast Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-900/65" />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950" />
+          {/* High-Contrast Gradient Overlays crafted for maximum video visibility + text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/55 to-slate-950/30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-transparent to-slate-950/85" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">

@@ -21,9 +21,34 @@ interface EvidenceDrawerProps {
 }
 
 const getStructureImage = (structureType?: string, customUrl?: string): string => {
-  if (customUrl && (customUrl.startsWith('/images/real/') || customUrl.startsWith('http'))) return customUrl;
   const s = (structureType || '').toLowerCase();
-  if (s.includes('check dam') || s.includes('nala bund')) return '/images/real/check_dam.jpg';
+  
+  if (customUrl && (customUrl.startsWith('/images/real/') || customUrl.startsWith('http'))) {
+    if (s.includes('johad') || s.includes('nadi')) {
+      return customUrl.includes('johad') ? customUrl : '/images/real/johad.jpg';
+    }
+    if (s.includes('percolation tank')) {
+      return customUrl.includes('percolation') ? customUrl : '/images/real/percolation_tank.jpg';
+    }
+    if (s.includes('farm pond') || s.includes('khet talab') || s.includes('pond')) {
+      return customUrl.includes('farm_pond') ? customUrl : '/images/real/farm_pond.jpg';
+    }
+    if (s.includes('contour') || s.includes('trench')) {
+      return (customUrl.includes('contour') || customUrl.includes('terraced')) ? customUrl : '/images/real/contour_trench.jpg';
+    }
+    if (s.includes('spring')) {
+      return customUrl.includes('spring') ? customUrl : '/images/real/spring_chamber.jpg';
+    }
+    if (s.includes('chauka') || s.includes('grassland')) {
+      return customUrl.includes('chauka') ? customUrl : '/images/real/chauka_system.jpg';
+    }
+    if (s.includes('check dam') || s.includes('nala bund') || s.includes('weir')) {
+      return customUrl.includes('check_dam') ? customUrl : '/images/real/check_dam.jpg';
+    }
+    return customUrl;
+  }
+
+  if (s.includes('check dam') || s.includes('nala bund') || s.includes('weir')) return '/images/real/check_dam.jpg';
   if (s.includes('chauka') || s.includes('grassland')) return '/images/real/chauka_system.jpg';
   if (s.includes('johad') || s.includes('nadi')) return '/images/real/johad.jpg';
   if (s.includes('percolation tank')) return '/images/real/percolation_tank.jpg';

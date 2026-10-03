@@ -343,8 +343,25 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         iv.decision_status === 'NEEDS_VERIFICATION' ? 'background: #fef3c7; color: #92400e;' :
         iv.decision_status === 'NEGATIVE_SIGNAL' ? 'background: #fee2e2; color: #991b1b;' : 'background: #e0f2fe; color: #075985;';
 
+      const getMarkerThumbnail = (type: string): string => {
+        const s = type.toLowerCase();
+        if (s.includes('johad') || s.includes('nadi')) return '/images/real/johad.jpg';
+        if (s.includes('percolation tank')) return '/images/real/percolation_tank.jpg';
+        if (s.includes('contour') || s.includes('trench')) return '/images/real/contour_trench.jpg';
+        if (s.includes('farm pond') || s.includes('khet talab') || s.includes('pond')) return '/images/real/farm_pond.jpg';
+        if (s.includes('spring')) return '/images/real/spring_chamber.jpg';
+        if (s.includes('chauka') || s.includes('grassland')) return '/images/real/chauka_system.jpg';
+        return '/images/real/check_dam.jpg';
+      };
+
       const popupContent = `
-        <div style="font-family: 'Inter', sans-serif; padding: 4px; min-width: 220px;">
+        <div style="font-family: 'Inter', sans-serif; padding: 2px; min-width: 230px;">
+          <div style="border-radius: 8px; overflow: hidden; height: 110px; margin-bottom: 8px; position: relative; background: #0f172a; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+            <img src="${getMarkerThumbnail(iv.structure_type)}" style="width: 100%; height: 100%; object-fit: cover;" alt="${iv.structure_type}" />
+            <span style="position: absolute; bottom: 6px; left: 6px; background: rgba(15,23,42,0.85); color: #ffffff; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);">
+              ${iv.structure_type}
+            </span>
+          </div>
           <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 6px;">
             <span style="font-weight: 700; font-size: 13px; color: #0f172a; font-family: monospace;">${iv.work_id}</span>
             <span style="font-size: 10px; padding: 2px 6px; border-radius: 9999px; font-weight: 700; text-transform: uppercase; ${statusBadgeClass}">
@@ -352,7 +369,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             </span>
           </div>
           <div style="font-size: 11px; color: #475569; line-height: 1.5;">
-            <div>Structure: <strong style="color: #0f172a;">${iv.structure_type}</strong></div>
             <div>Readiness Score: <strong style="color: #0E8A42;">${iv.evidence_readiness_score}/100</strong></div>
             <div>Stream Drainage: <strong>Order ${iv.stream_order || 1}</strong> (${iv.slope_pct || 2.4}% slope)</div>
             <div>Coordinates: <code style="font-size: 10px; color: #64748b;">${iv.latitude.toFixed(4)}°N, ${iv.longitude.toFixed(4)}°E</code></div>
