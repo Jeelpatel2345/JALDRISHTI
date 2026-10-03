@@ -28,6 +28,12 @@ export const Navbar: React.FC = () => {
     success(`Switched role to ${roles.find(r => r.id === newRole)?.label}`);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    success('Session Terminated', 'You have been safely signed out of the National Geospatial Grid.');
+    navigate('/login');
+  };
+
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
       <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -46,7 +52,7 @@ export const Navbar: React.FC = () => {
                   <span className="text-[#0E8A42]">DRISHTI</span>
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded">
-                  SIH26015
+                  WDC-PMKSY 2.0
                 </span>
               </div>
               <p className="text-[10px] text-slate-500 font-medium leading-none">
@@ -84,7 +90,7 @@ export const Navbar: React.FC = () => {
             {roleMenuOpen && (
               <div className="absolute right-0 mt-2 w-72 rounded-xl bg-white border border-slate-200 shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1">
                 <div className="px-3 py-1.5 border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                  Simulate Operational Persona (SIH)
+                  Operational Clearance Role
                 </div>
                 {roles.map((r) => (
                   <button
@@ -115,26 +121,36 @@ export const Navbar: React.FC = () => {
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse" />
           </Link>
 
-          {/* User Profile Pill */}
-          <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-            <Link to="/profile" className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-              <div className="w-8 h-8 rounded-full bg-forest-100 text-forest-800 flex items-center justify-center font-bold text-xs">
-                {user?.full_name ? user.full_name.charAt(0) : 'U'}
-              </div>
-              <div className="hidden lg:block text-left">
-                <div className="text-xs font-semibold text-slate-900 leading-tight">{user?.full_name || 'Officer'}</div>
-                <div className="text-[10px] text-slate-500 capitalize">{role.replace('_', ' ')}</div>
-              </div>
-            </Link>
+          {/* User Profile & Sign Out */}
+          {user ? (
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+              <Link to="/profile" className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
+                <div className="w-8 h-8 rounded-full bg-forest-100 text-forest-800 flex items-center justify-center font-bold text-xs">
+                  {user?.full_name ? user.full_name.charAt(0) : 'U'}
+                </div>
+                <div className="hidden lg:block text-left">
+                  <div className="text-xs font-semibold text-slate-900 leading-tight">{user?.full_name || 'Officer'}</div>
+                  <div className="text-[10px] text-slate-500 capitalize">{role.replace('_', ' ')}</div>
+                </div>
+              </Link>
 
-            <button
-              onClick={logout}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-              title="Logout"
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors border border-red-100"
+                title="Sign Out of Session"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="px-3.5 py-1.5 bg-[#0265D2] hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm"
             >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
     </header>

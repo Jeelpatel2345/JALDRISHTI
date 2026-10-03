@@ -24,7 +24,7 @@ export const LandingPage: React.FC = () => {
                   <span className="text-[#0E8A42]">DRISHTI</span>
                 </span>
                 <span className="text-[10px] uppercase font-bold tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded">
-                  SIH26015
+                  WDC-PMKSY 2.0
                 </span>
               </div>
               <p className="text-[10px] text-slate-500 font-medium leading-none">
@@ -141,7 +141,7 @@ export const LandingPage: React.FC = () => {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-2xl font-bold text-slate-900">Why JALDRISHTI is Not Just Another GIS Map</h2>
             <p className="text-xs text-slate-500 mt-2">
-              Addressing the real problem in SIH26015: turning 1.5 million compliance photographs into verifiable outcome intelligence.
+              Addressing the critical operational challenge: turning 1.5 million compliance photographs into verifiable outcome intelligence.
             </p>
           </div>
 
@@ -221,7 +221,7 @@ export const LandingPage: React.FC = () => {
             <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain" />
             <span className="text-white font-bold tracking-tight">JALDRISHTI</span>
             <span>•</span>
-            <span>SIH26015 Watershed Monitoring and Outcome Assessment</span>
+            <span>National Watershed Monitoring & Outcome Assessment Grid</span>
           </div>
           <div>
             Department of Land Resources (DoLR), Ministry of Rural Development, Govt. of India

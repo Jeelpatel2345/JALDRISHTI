@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { AppShell } from './components/layout/AppShell';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 // Pages
 import { LandingPage } from './pages/LandingPage';
@@ -32,8 +33,8 @@ export function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
 
-            {/* Application Shell Routes */}
-            <Route element={<AppShell />}>
+            {/* Application Shell Routes - Protected Behind Authentication */}
+            <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/watersheds" element={<WatershedsPage />} />
               <Route path="/watersheds/:id" element={<WatershedDetailPage />} />

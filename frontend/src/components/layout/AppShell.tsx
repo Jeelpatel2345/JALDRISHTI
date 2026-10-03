@@ -41,7 +41,7 @@ export const AppShell: React.FC = () => {
               <div className="hidden sm:flex items-center gap-3 text-[11px] text-slate-400 font-medium">
                 <span>WDC-PMKSY 2.0 Spatial Intelligence Workbench</span>
                 <span>•</span>
-                <span>SIH26015 Evaluation Environment</span>
+                <span>National Geospatial Monitoring Grid</span>
               </div>
             </div>
           )}

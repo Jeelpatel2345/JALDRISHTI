@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { 
   Layers, MapPin, Eye, Satellite, Mountain, Map as MapIcon, 
-  Maximize2, ZoomIn, ZoomOut, Compass, Sparkles 
+  Maximize2, ZoomIn, ZoomOut, Compass, Sparkles, Search, Loader2, Navigation, X
 } from 'lucide-react';
 import { Intervention, Watershed } from '../../types';
 
@@ -43,6 +43,73 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const [showBoundaries, setShowBoundaries] = useState(true);
   const [showDrainage, setShowDrainage] = useState(true);
   const [showBuffers, setShowBuffers] = useState(false);
+
+  // Real-World Geocoding Search States
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchMarkerRef = useRef<L.Marker | null>(null);
+
+  // Real-World National Benchmark Watersheds Across India
+  const benchmarkRegions = [
+    { label: '🇮🇳 Pan-India', center: [22.5000, 78.9000] as [number, number], zoom: 5 },
+    { label: 'Ralegan Siddhi (MH)', center: [19.0425, 74.4981] as [number, number], zoom: 14 },
+    { label: 'Arvari Basin (RJ)', center: [27.3210, 76.2750] as [number, number], zoom: 13 },
+    { label: 'Jhabua Tribal (MP)', center: [22.7540, 74.5680] as [number, number], zoom: 13 },
+    { label: 'Shirapur (MH)', center: [17.6250, 75.8820] as [number, number], zoom: 13 },
+    { label: 'Penna Catchment (AP)', center: [14.6720, 77.6120] as [number, number], zoom: 13 },
+    { label: 'Garhwal Springshed (UK)', center: [30.3720, 78.4650] as [number, number], zoom: 13 },
+    { label: 'Rajkot Aji-1 (GJ)', center: [22.2541, 70.7812] as [number, number], zoom: 13 },
+  ];
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=5`
+      );
+      const data = await res.json();
+      setSearchResults(data);
+      setShowSearchResults(true);
+      if (data.length > 0) {
+        flyToLocation(parseFloat(data[0].lat), parseFloat(data[0].lon), data[0].display_name);
+      }
+    } catch (err) {
+      console.error('Geocoding error:', err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const flyToLocation = (lat: number, lon: number, name: string) => {
+    if (!leafletMap.current) return;
+    leafletMap.current.flyTo([lat, lon], 14, { duration: 1.5 });
+    setShowSearchResults(false);
+
+    if (searchMarkerRef.current) {
+      leafletMap.current.removeLayer(searchMarkerRef.current);
+    }
+
+    const pinIcon = L.divIcon({
+      html: `
+        <div style="background: #e11d48; width: 28px; height: 28px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px rgba(225,29,72,0.8); display: flex; align-items: center; justify-content: center; color: white;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+      `,
+      className: 'search-pin',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+
+    const marker = L.marker([lat, lon], { icon: pinIcon })
+      .bindPopup(`<div style="padding: 4px; font-size: 11px;"><strong>${name}</strong><br/><span style="color:#64748b;">${lat.toFixed(4)}°N, ${lon.toFixed(4)}°E</span></div>`)
+      .addTo(leafletMap.current);
+    marker.openPopup();
+    searchMarkerRef.current = marker;
+  };
 
   // Basemap Tile URLs
   const basemapUrls = {
@@ -358,6 +425,55 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         </button>
       </div>
 
+      {/* Top Center: Real-World Location Search Bar */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-80 sm:w-96 hidden md:block">
+        <form onSubmit={handleSearch} className="relative flex items-center shadow-xl">
+          <div className="relative w-full">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search any place in India or globally..."
+              className="w-full pl-9 pr-9 py-2 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0265D2] shadow-sm"
+            />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => { setSearchQuery(''); setShowSearchResults(false); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+          <button
+            type="submit"
+            disabled={isSearching}
+            className="ml-2 px-3 py-2 bg-[#0265D2] hover:bg-sky-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-md transition-colors"
+          >
+            {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <span>Fly To</span>}
+          </button>
+        </form>
+
+        {/* Search Results Dropdown */}
+        {showSearchResults && searchResults.length > 0 && (
+          <div className="mt-1 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-2xl p-1 max-h-48 overflow-y-auto text-xs space-y-0.5">
+            {searchResults.map((r, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => flyToLocation(parseFloat(r.lat), parseFloat(r.lon), r.display_name)}
+                className="w-full text-left p-2 rounded-lg hover:bg-sky-50 text-slate-800 transition-colors flex items-start gap-2"
+              >
+                <MapPin className="w-3.5 h-3.5 text-[#0265D2] flex-shrink-0 mt-0.5" />
+                <span className="line-clamp-2 text-[11px] leading-snug">{r.display_name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* Top Right Zoom to Boundary Button */}
       <button
         onClick={fitToWatershed}
@@ -420,7 +536,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       )}
 
       {/* Floating Legend */}
-      <div className="absolute bottom-4 left-4 z-20 bg-white/95 backdrop-blur-md rounded-xl p-3 border border-slate-200 shadow-xl text-[11px] space-y-1.5">
+      <div className="absolute bottom-4 left-4 z-20 bg-white/95 backdrop-blur-md rounded-xl p-3 border border-slate-200 shadow-xl text-[11px] space-y-1.5 hidden lg:block">
         <div className="font-bold text-slate-800 uppercase tracking-wider text-[10px] flex items-center justify-between gap-4">
           <span>Signal Legend</span>
           <span className="text-[9px] font-mono text-slate-400">Esri / Sentinel-2</span>
@@ -441,6 +557,28 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           <span className="w-2.5 h-2.5 rounded-full bg-[#0284c7] ring-1 ring-white" />
           <span className="text-slate-700 font-medium">Inconclusive (Marginal Delta)</span>
         </div>
+      </div>
+
+      {/* National Benchmark Watershed Quick Teleporter */}
+      <div className="absolute bottom-4 right-4 z-20 max-w-[calc(100%-20px)] sm:max-w-[550px] flex items-center gap-1.5 overflow-x-auto p-1.5 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-xl">
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-1.5 flex items-center gap-1 whitespace-nowrap">
+          <Navigation className="w-3 h-3 text-[#0265D2]" />
+          <span>Teleport:</span>
+        </span>
+        {benchmarkRegions.map((reg, idx) => (
+          <button
+            key={idx}
+            type="button"
+            onClick={() => {
+              if (leafletMap.current) {
+                leafletMap.current.flyTo(reg.center, reg.zoom, { duration: 1.5 });
+              }
+            }}
+            className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 hover:bg-sky-50 hover:text-[#0265D2] text-slate-700 whitespace-nowrap transition-all border border-slate-200/60 shadow-xs"
+          >
+            {reg.label}
+          </button>
+        ))}
       </div>
     </div>
   );

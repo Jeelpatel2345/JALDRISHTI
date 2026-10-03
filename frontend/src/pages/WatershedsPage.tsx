@@ -64,12 +64,16 @@ export const WatershedsPage: React.FC = () => {
           <select
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-forest-900 font-semibold"
+            className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0265D2] font-semibold"
           >
-            <option value="ALL">All Districts</option>
+            <option value="ALL">All States & Districts</option>
+            <option value="Ahmednagar">Ahmednagar (Maharashtra)</option>
+            <option value="Alwar">Alwar (Rajasthan)</option>
+            <option value="Jhabua">Jhabua (Madhya Pradesh)</option>
+            <option value="Solapur">Solapur (Maharashtra)</option>
+            <option value="Ananthapuramu">Ananthapuramu (Andhra Pradesh)</option>
+            <option value="Tehri Garhwal">Tehri Garhwal (Uttarakhand)</option>
             <option value="Rajkot">Rajkot (Gujarat)</option>
-            <option value="Dharwad">Dharwad (Karnataka)</option>
-            <option value="Ananthapuramu">Ananthapuramu (AP)</option>
           </select>
         </div>
       </div>
