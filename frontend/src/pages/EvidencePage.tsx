@@ -110,7 +110,7 @@ export const EvidencePage: React.FC = () => {
                     alt="Field evidence"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                      (e.target as HTMLImageElement).src = '/images/real/check_dam.jpg';
                     }}
                   />
                   <div className="absolute top-2.5 right-2.5">
@@ -287,7 +287,7 @@ export const EvidencePage: React.FC = () => {
               alt="High resolution inspect"
               className="w-full rounded-xl aspect-video object-cover border border-slate-200"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                (e.target as HTMLImageElement).src = '/images/real/check_dam.jpg';
               }}
             />
             <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">

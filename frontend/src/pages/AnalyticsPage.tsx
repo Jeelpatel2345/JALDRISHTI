@@ -50,9 +50,9 @@ export const AnalyticsPage: React.FC = () => {
       subtitle: 'Khirasara Riverbed • Rajkot Semi-Arid Watershed',
       category: 'Civil Water Harvesting',
       location: '22.2541°N, 70.7812°E (Rajkot, Gujarat)',
-      // Parched dry rocky riverbed before -> Lush check dam impoundment with full water after
-      beforeImage: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1584444976722-10f76c38260b?auto=format&fit=crop&w=1400&q=80',
+      // Parched dry rocky riverbed before -> Real masonry check dam with flowing water after
+      beforeImage: '/images/real/rajkot_before_dry_bed.jpg',
+      afterImage: '/images/real/rajkot_after_check_dam.jpg',
       beforeDate: 'October 2021 (Pre-Intervention Baseline)',
       afterDate: 'October 2023 (Post-Intervention Outcome)',
       beforeDesc: 'Dry, barren stream bed with zero surface storage. Seasonal monsoon runoff flushed downstream within 72 hours, leaving the bed parched and uncultivated.',
@@ -72,9 +72,9 @@ export const AnalyticsPage: React.FC = () => {
       subtitle: 'Kelageri Sub-basin • Dharwad Black Cotton Catchment',
       category: 'Farm Pond / Runoff Harvesting',
       location: '15.4610°N, 75.0120°E (Dharwad, Karnataka)',
-      // Cracked arid soil before -> Water-filled farm pond with surrounding green agricultural vegetation after
-      beforeImage: 'https://images.unsplash.com/photo-1545153996-e01b50d6f212?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1400&q=80',
+      // Cracked arid soil before -> Real water-filled farm pond with surrounding green agricultural vegetation after
+      beforeImage: '/images/real/dharwad_before_parched.jpg',
+      afterImage: '/images/real/dharwad_after_farm_pond.jpg',
       beforeDate: 'November 2021 (Baseline)',
       afterDate: 'November 2023 (Outcome)',
       beforeDesc: 'Fallow black cotton soil suffering from moisture stress. Deep surface cracking and unmitigated runoff caused severe topsoil loss.',
@@ -95,8 +95,8 @@ export const AnalyticsPage: React.FC = () => {
       category: 'Vegetative & Ridge Treatment',
       location: '14.6620°N, 77.6250°E (Ananthapuramu, AP)',
       // Barren rocky dry mountain slope before -> Vegetative terraced hill slope with thriving young trees after
-      beforeImage: 'https://images.unsplash.com/photo-1617839625591-e5a789593135?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80',
+      beforeImage: '/images/real/ananthapur_before_barren.jpg',
+      afterImage: '/images/real/ananthapur_after_terraced.jpg',
       beforeDate: 'May 2021 (Summer Baseline)',
       afterDate: 'May 2024 (Post-Treatment Outcome)',
       beforeDesc: 'Steep degraded ridge with 8% slope and extensive gully wash. High velocity sheet runoff stripped subsoil with zero infiltration.',
@@ -116,9 +116,9 @@ export const AnalyticsPage: React.FC = () => {
       subtitle: 'Khirasara 4,850 ha Catchment Overview',
       category: 'Landscape Scale Assessment',
       location: 'Rajkot District, Gujarat',
-      // Arid brown landscape before -> Lush green agricultural basin with water reservoirs after
-      beforeImage: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1400&q=80',
+      // Arid brown landscape before -> Real dam reservoir and irrigated green catchment after
+      beforeImage: '/images/real/rajkot_before_dry_bed.jpg',
+      afterImage: '/images/real/sardar_sarovar_dam.jpg',
       beforeDate: 'October 2021 (Pre-WDC PMKSY 2.0)',
       afterDate: 'October 2023 (Post-Implementation)',
       beforeDesc: 'Regional satellite composite shows dry, drought-affected scrubland with fragmented single-crop rainfed farming.',

@@ -21,16 +21,16 @@ interface EvidenceDrawerProps {
 }
 
 const getStructureImage = (structureType?: string, customUrl?: string): string => {
-  if (customUrl && customUrl.startsWith('/images/')) return customUrl;
+  if (customUrl && (customUrl.startsWith('/images/real/') || customUrl.startsWith('http'))) return customUrl;
   const s = (structureType || '').toLowerCase();
-  if (s.includes('check dam') || s.includes('nala bund')) return '/images/check_dam.svg';
-  if (s.includes('chauka') || s.includes('grassland')) return '/images/chauka_system.svg';
-  if (s.includes('johad')) return '/images/johad.svg';
-  if (s.includes('percolation tank')) return '/images/percolation_tank.svg';
-  if (s.includes('contour') || s.includes('trench')) return '/images/contour_trench.svg';
-  if (s.includes('farm pond') || s.includes('khet talab') || s.includes('pond')) return '/images/farm_pond.svg';
-  if (s.includes('spring')) return '/images/spring_chamber.svg';
-  return '/images/check_dam.svg';
+  if (s.includes('check dam') || s.includes('nala bund')) return '/images/real/check_dam.jpg';
+  if (s.includes('chauka') || s.includes('grassland')) return '/images/real/chauka_system.jpg';
+  if (s.includes('johad') || s.includes('nadi')) return '/images/real/johad.jpg';
+  if (s.includes('percolation tank')) return '/images/real/percolation_tank.jpg';
+  if (s.includes('contour') || s.includes('trench')) return '/images/real/contour_trench.jpg';
+  if (s.includes('farm pond') || s.includes('khet talab') || s.includes('pond')) return '/images/real/farm_pond.jpg';
+  if (s.includes('spring')) return '/images/real/spring_chamber.jpg';
+  return '/images/real/check_dam.jpg';
 };
 
 export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
@@ -147,7 +147,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
                     alt={intervention.structure_type}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                      (e.target as HTMLImageElement).src = '/images/real/check_dam.jpg';
                     }}
                   />
                   <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white text-xs flex items-center justify-between">

@@ -148,11 +148,11 @@ export const ReportsPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             <div className="aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
               <img
-                src={report?.field_evidence[0]?.image_url || '/images/check_dam.svg'}
+                src={report?.field_evidence[0]?.image_url || '/images/real/check_dam.jpg'}
                 alt="Structure proof"
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/images/check_dam.svg';
+                  (e.target as HTMLImageElement).src = '/images/real/check_dam.jpg';
                 }}
               />
             </div>

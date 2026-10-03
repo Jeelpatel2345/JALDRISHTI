@@ -48,37 +48,54 @@ export const LandingPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-16 pb-20 overflow-hidden border-b border-slate-200 bg-gradient-to-b from-white via-slate-50 to-[#F8FAFC]">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* Hero Section with Cinematic Dam & Water Background Video */}
+      <section className="relative pt-20 pb-24 overflow-hidden border-b border-slate-800 bg-slate-950 text-white">
+        {/* Cinematic Water & Dam Video Background */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/images/real/sardar_sarovar_dam.jpg"
+            className="w-full h-full object-cover opacity-30 filter brightness-90 contrast-110"
+          >
+            <source src="/videos/dam_water.webm" type="video/webm" />
+          </video>
+          {/* Multi-stage High-Contrast Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-900/65" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold mb-6">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-6 backdrop-blur-md shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Smart India Hackathon 2026 • Ministry of Rural Development</span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                From geo-tagged proof to <span className="text-[#0E8A42]">measurable watershed outcomes</span>.
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                From geo-tagged proof to <span className="text-emerald-400">measurable watershed outcomes</span>.
               </h1>
 
-              <p className="mt-5 text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
+              <p className="mt-5 text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
                 Connect field photographs, Sentinel-2 multi-spectral time series, and CartoDEM terrain context into one auditable, evidence-backed workflow for WDC-PMKSY 2.0.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link
                   to="/dashboard"
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#0265D2] text-white text-sm font-semibold hover:bg-sky-700 transition-all shadow-md hover:shadow-lg"
+                  className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#0265D2] text-white text-sm font-semibold hover:bg-sky-500 transition-all shadow-lg hover:shadow-sky-500/25"
                 >
                   <span>Launch Live Command Center</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/analytics"
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-800 text-sm font-semibold hover:bg-slate-50 transition-all shadow-sm"
+                  className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 border border-white/20 text-white text-sm font-semibold hover:bg-white/20 transition-all backdrop-blur-md shadow-sm"
                 >
-                  <Eye className="w-4 h-4 text-emerald-700" />
+                  <Eye className="w-4 h-4 text-emerald-400" />
                   <span>Inspect Before vs After Analysis</span>
                 </Link>
               </div>
@@ -86,15 +103,15 @@ export const LandingPage: React.FC = () => {
 
             {/* Emblem Feature Spotlight */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative p-3 rounded-3xl bg-white/80 border border-slate-200 shadow-2xl backdrop-blur-sm group hover:scale-[1.02] transition-transform">
+              <div className="relative p-3 rounded-3xl bg-slate-900/60 border border-white/20 shadow-2xl backdrop-blur-xl group hover:scale-[1.02] transition-transform">
                 <img
                   src="/logo.png"
                   alt="JALDRISHTI Project Logo"
-                  className="w-80 h-80 sm:w-96 sm:h-96 object-contain"
+                  className="w-80 h-80 sm:w-96 sm:h-96 object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
                 />
-                <div className="absolute -bottom-3 inset-x-8 bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-slate-200 shadow-lg text-center">
-                  <span className="text-xs font-bold text-slate-900 block">JALDRISHTI Emblem</span>
-                  <span className="text-[10px] text-slate-500 block">Satellite Telemetry • Micro-Catchments • Water Infiltration</span>
+                <div className="absolute -bottom-3 inset-x-8 bg-slate-900/90 backdrop-blur-md rounded-2xl p-3 border border-white/20 shadow-lg text-center">
+                  <span className="text-xs font-bold text-white block">JALDRISHTI Emblem</span>
+                  <span className="text-[10px] text-slate-300 block">Satellite Telemetry • Micro-Catchments • Water Infiltration</span>
                 </div>
               </div>
             </div>
@@ -102,32 +119,32 @@ export const LandingPage: React.FC = () => {
 
           {/* 3-Step Evidence Chain Interactive Banner */}
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm relative group hover:border-[#0265D2] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-sky-50 text-[#0265D2] border border-sky-100 flex items-center justify-center font-bold text-sm mb-4">
+            <div className="bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-700/70 p-6 shadow-xl relative group hover:border-[#0265D2] transition-all">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-400/30 flex items-center justify-center font-bold text-sm mb-4">
                 01
               </div>
-              <h3 className="text-sm font-bold text-slate-900">Ground Evidence & EXIF Hash</h3>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <h3 className="text-sm font-bold text-white">Ground Evidence & EXIF Hash</h3>
+              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
                 Field photos captured on site with client-verified GNSS coordinates, timestamp, camera model, and cryptographic SHA-256 digest to prevent spoofing.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm relative group hover:border-[#0E8A42] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#0E8A42] border border-emerald-100 flex items-center justify-center font-bold text-sm mb-4">
+            <div className="bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-700/70 p-6 shadow-xl relative group hover:border-emerald-400 transition-all">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-400/30 flex items-center justify-center font-bold text-sm mb-4">
                 02
               </div>
-              <h3 className="text-sm font-bold text-slate-900">Earth Observation & Terrain</h3>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <h3 className="text-sm font-bold text-white">Earth Observation & Terrain</h3>
+              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
                 24-month Sentinel-2 Level-2A surface reflectance (NDVI, MNDWI, NDMI) and CartoDEM slope analysis isolate genuine ecological recovery from seasonal rainfall.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm relative group hover:border-[#0265D2] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-forest-50 text-forest-900 border border-forest-200 flex items-center justify-center font-bold text-sm mb-4">
+            <div className="bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-700/70 p-6 shadow-xl relative group hover:border-[#0265D2] transition-all">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-400/30 flex items-center justify-center font-bold text-sm mb-4">
                 03
               </div>
-              <h3 className="text-sm font-bold text-slate-900">Triage & Statutory Dossier</h3>
-              <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+              <h3 className="text-sm font-bold text-white">Triage & Statutory Dossier</h3>
+              <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
                 Transparent Evidence Readiness Score (0-100) and directional signals convert telemetry into decisive reviewer approvals and MoRD compliance dossiers.
               </p>
             </div>
