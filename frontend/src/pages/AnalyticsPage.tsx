@@ -52,7 +52,7 @@ export const AnalyticsPage: React.FC = () => {
       location: '22.2541°N, 70.7812°E (Rajkot, Gujarat)',
       // Parched dry rocky riverbed before -> Lush check dam impoundment with full water after
       beforeImage: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1400&q=80',
+      afterImage: 'https://images.unsplash.com/photo-1584444976722-10f76c38260b?auto=format&fit=crop&w=1400&q=80',
       beforeDate: 'October 2021 (Pre-Intervention Baseline)',
       afterDate: 'October 2023 (Post-Intervention Outcome)',
       beforeDesc: 'Dry, barren stream bed with zero surface storage. Seasonal monsoon runoff flushed downstream within 72 hours, leaving the bed parched and uncultivated.',
@@ -73,8 +73,8 @@ export const AnalyticsPage: React.FC = () => {
       category: 'Farm Pond / Runoff Harvesting',
       location: '15.4610°N, 75.0120°E (Dharwad, Karnataka)',
       // Cracked arid soil before -> Water-filled farm pond with surrounding green agricultural vegetation after
-      beforeImage: 'https://images.unsplash.com/photo-1518457607834-6e8d80c183c5?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80',
+      beforeImage: 'https://images.unsplash.com/photo-1545153996-e01b50d6f212?auto=format&fit=crop&w=1400&q=80',
+      afterImage: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1400&q=80',
       beforeDate: 'November 2021 (Baseline)',
       afterDate: 'November 2023 (Outcome)',
       beforeDesc: 'Fallow black cotton soil suffering from moisture stress. Deep surface cracking and unmitigated runoff caused severe topsoil loss.',
@@ -95,8 +95,8 @@ export const AnalyticsPage: React.FC = () => {
       category: 'Vegetative & Ridge Treatment',
       location: '14.6620°N, 77.6250°E (Ananthapuramu, AP)',
       // Barren rocky dry mountain slope before -> Vegetative terraced hill slope with thriving young trees after
-      beforeImage: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1400&q=80',
+      beforeImage: 'https://images.unsplash.com/photo-1617839625591-e5a789593135?auto=format&fit=crop&w=1400&q=80',
+      afterImage: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1400&q=80',
       beforeDate: 'May 2021 (Summer Baseline)',
       afterDate: 'May 2024 (Post-Treatment Outcome)',
       beforeDesc: 'Steep degraded ridge with 8% slope and extensive gully wash. High velocity sheet runoff stripped subsoil with zero infiltration.',
@@ -117,8 +117,8 @@ export const AnalyticsPage: React.FC = () => {
       category: 'Landscape Scale Assessment',
       location: 'Rajkot District, Gujarat',
       // Arid brown landscape before -> Lush green agricultural basin with water reservoirs after
-      beforeImage: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1400&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80',
+      beforeImage: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1400&q=80',
+      afterImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1400&q=80',
       beforeDate: 'October 2021 (Pre-WDC PMKSY 2.0)',
       afterDate: 'October 2023 (Post-Implementation)',
       beforeDesc: 'Regional satellite composite shows dry, drought-affected scrubland with fragmented single-crop rainfed farming.',

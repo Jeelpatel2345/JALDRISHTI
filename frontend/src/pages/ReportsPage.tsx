@@ -148,7 +148,7 @@ export const ReportsPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
             <div className="aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-900">
               <img
-                src={report?.field_evidence[0]?.image_url || 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80'}
+                src={report?.field_evidence[0]?.image_url || 'https://images.unsplash.com/photo-1584444976722-10f76c38260b?auto=format&fit=crop&w=1200&q=80'}
                 alt="Structure proof"
                 className="w-full h-full object-cover"
               />

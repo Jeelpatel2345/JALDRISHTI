@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { 
   Layers, MapPin, Eye, Satellite, Mountain, Map as MapIcon, 
-  Maximize2, ZoomIn, ZoomOut, Compass, Sparkles, Search, Loader2, Navigation, X
+  Maximize2, Minimize2, ZoomIn, ZoomOut, Compass, Sparkles, Search, Loader2, Navigation, X, ChevronDown, Check, Info
 } from 'lucide-react';
 import { Intervention, Watershed } from '../../types';
 
@@ -22,7 +22,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   interventions = [],
   selectedInterventionId = null,
   onSelectIntervention,
-  center = [22.2541, 70.7812], // Rajkot centroid by default
+  center = [22.2541, 70.7812], // Default centroid
   zoom = 13,
   height = '500px',
   showLayerControls = true
@@ -44,6 +44,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const [showDrainage, setShowDrainage] = useState(true);
   const [showBuffers, setShowBuffers] = useState(false);
 
+  // Dropdown states to keep map canvas 100% clean
+  const [layersMenuOpen, setLayersMenuOpen] = useState(false);
+  const [teleportMenuOpen, setTeleportMenuOpen] = useState(false);
+  const [legendOpen, setLegendOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   // Real-World Geocoding Search States
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -53,14 +59,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   // Real-World National Benchmark Watersheds Across India
   const benchmarkRegions = [
-    { label: '🇮🇳 Pan-India', center: [22.5000, 78.9000] as [number, number], zoom: 5 },
-    { label: 'Ralegan Siddhi (MH)', center: [19.0425, 74.4981] as [number, number], zoom: 14 },
-    { label: 'Arvari Basin (RJ)', center: [27.3210, 76.2750] as [number, number], zoom: 13 },
-    { label: 'Jhabua Tribal (MP)', center: [22.7540, 74.5680] as [number, number], zoom: 13 },
-    { label: 'Shirapur (MH)', center: [17.6250, 75.8820] as [number, number], zoom: 13 },
-    { label: 'Penna Catchment (AP)', center: [14.6720, 77.6120] as [number, number], zoom: 13 },
-    { label: 'Garhwal Springshed (UK)', center: [30.3720, 78.4650] as [number, number], zoom: 13 },
-    { label: 'Rajkot Aji-1 (GJ)', center: [22.2541, 70.7812] as [number, number], zoom: 13 },
+    { label: '🇮🇳 Pan-India Grid', center: [22.5000, 78.9000] as [number, number], zoom: 5 },
+    { label: 'Ralegan Siddhi (Ahmednagar, MH)', center: [19.0425, 74.4981] as [number, number], zoom: 14 },
+    { label: 'Arvari River Catchment (Alwar, RJ)', center: [27.3210, 76.2750] as [number, number], zoom: 13 },
+    { label: 'Jhabua Tribal Catchment (MP)', center: [22.7540, 74.5680] as [number, number], zoom: 13 },
+    { label: 'Shirapur Ridge Basin (Solapur, MH)', center: [17.6250, 75.8820] as [number, number], zoom: 13 },
+    { label: 'Penna Catchment (Anantapur, AP)', center: [14.6720, 77.6120] as [number, number], zoom: 13 },
+    { label: 'Garhwal Springshed (Tehri, UK)', center: [30.3720, 78.4650] as [number, number], zoom: 13 },
+    { label: 'Khirasara-Aji (Rajkot, GJ)', center: [22.2541, 70.7812] as [number, number], zoom: 13 },
   ];
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -182,6 +188,15 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     }
   }, [center[0], center[1], zoom]);
 
+  // Invalidate map size on fullscreen toggle
+  useEffect(() => {
+    if (leafletMap.current) {
+      setTimeout(() => {
+        leafletMap.current?.invalidateSize();
+      }, 250);
+    }
+  }, [isFullscreen]);
+
   // Render Watershed Boundary Polygons
   useEffect(() => {
     if (!polygonLayerGroup.current) return;
@@ -237,7 +252,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         opacity: 0.9,
       });
       line.bindTooltip(
-        idx === 2 ? 'Khirasara Main Nala (Strahler Order 2 - Check Dam Axis)' : 'Order 1 Tributary Channel',
+        idx === 2 ? 'Khirasara Main Stream (Strahler Order 2 - Check Dam Axis)' : 'Order 1 Tributary Channel',
         { sticky: true, className: 'text-xs' }
       );
       drainageLayerGroup.current?.addLayer(line);
@@ -280,7 +295,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       let ringColor = 'rgba(2, 132, 199, 0.4)';
 
       if (iv.decision_status === 'POSITIVE_SIGNAL') {
-        pinColor = '#0E8A42'; // Vibrant DRISHTI Green
+        pinColor = '#0E8A42'; // Vibrant Green
         ringColor = 'rgba(14, 138, 66, 0.4)';
       } else if (iv.decision_status === 'NEGATIVE_SIGNAL') {
         pinColor = '#dc2626'; // Red
@@ -378,207 +393,299 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     }
   };
 
+  const toggleFullscreen = () => {
+    setIsFullscreen((prev) => !prev);
+  };
+
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md group" style={{ height }}>
-      {/* Leaflet Map DOM Element */}
-      <div ref={mapRef} className="w-full h-full z-0" />
+    <div className={`space-y-3 transition-all ${isFullscreen ? 'fixed inset-0 z-[9999] bg-slate-900 p-4 flex flex-col' : ''}`}>
+      {/* 
+        EXTERNAL COMMAND TOOLBAR (Outside the map! Zero clutter inside canvas)
+      */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
+        {/* Left: Basemap Switcher + GIS Layers Dropdown + Benchmark Teleporter Dropdown */}
+        <div className="flex items-center flex-wrap gap-2">
+          {/* Basemap Segmented Toggle */}
+          <div className="flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200">
+            <button
+              type="button"
+              onClick={() => setBasemap('satellite')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                basemap === 'satellite'
+                  ? 'bg-[#0265D2] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+              title="True-color High Resolution Esri Satellite"
+            >
+              <Satellite className="w-3.5 h-3.5" />
+              <span>Satellite</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setBasemap('carto')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                basemap === 'carto'
+                  ? 'bg-[#0265D2] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+              title="Clean Government Vector Carto Basemap"
+            >
+              <MapIcon className="w-3.5 h-3.5" />
+              <span>Clean Map</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setBasemap('topo')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                basemap === 'topo'
+                  ? 'bg-[#0265D2] text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+              }`}
+              title="Topographic Elevation & Contours"
+            >
+              <Mountain className="w-3.5 h-3.5" />
+              <span>Terrain</span>
+            </button>
+          </div>
 
-      {/* Top Left: Basemap Mode Switcher (Satellite 🛰️ vs Clean 🗺️ vs Topo ⛰️) */}
-      <div className="absolute top-4 left-4 z-20 flex items-center bg-white/95 backdrop-blur-md rounded-xl p-1 border border-slate-200 shadow-xl">
-        <button
-          onClick={() => setBasemap('satellite')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-            basemap === 'satellite'
-              ? 'bg-forest-900 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-          }`}
-          title="High-Resolution Real Satellite Imagery"
-        >
-          <Satellite className="w-3.5 h-3.5" />
-          <span>Real Satellite</span>
-        </button>
-
-        <button
-          onClick={() => setBasemap('carto')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-            basemap === 'carto'
-              ? 'bg-forest-900 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-          }`}
-          title="Clean Light Government Carto Basemap"
-        >
-          <MapIcon className="w-3.5 h-3.5" />
-          <span>Clean Map</span>
-        </button>
-
-        <button
-          onClick={() => setBasemap('topo')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-            basemap === 'topo'
-              ? 'bg-forest-900 text-white shadow-sm'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-          }`}
-          title="Topographic Elevation & Contours"
-        >
-          <Mountain className="w-3.5 h-3.5" />
-          <span>Terrain Topo</span>
-        </button>
-      </div>
-
-      {/* Top Center: Real-World Location Search Bar */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-80 sm:w-96 hidden md:block">
-        <form onSubmit={handleSearch} className="relative flex items-center shadow-xl">
-          <div className="relative w-full">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search any place in India or globally..."
-              className="w-full pl-9 pr-9 py-2 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#0265D2] shadow-sm"
-            />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            {searchQuery && (
+          {/* GIS Layers Dropdown */}
+          {showLayerControls && (
+            <div className="relative">
               <button
                 type="button"
-                onClick={() => { setSearchQuery(''); setShowSearchResults(false); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                onClick={() => setLayersMenuOpen(!layersMenuOpen)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-xs transition-colors"
               >
-                <X className="w-3.5 h-3.5" />
+                <Layers className="w-3.5 h-3.5 text-[#0265D2]" />
+                <span>GIS Layers</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
+
+              {layersMenuOpen && (
+                <div className="absolute left-0 mt-2 w-56 rounded-2xl bg-white border border-slate-200 shadow-2xl p-3 z-50 text-xs space-y-2.5 animate-in fade-in slide-in-from-top-1">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b pb-1.5">
+                    <span>Thematic Overlays</span>
+                    <button onClick={() => setLayersMenuOpen(false)} className="text-slate-400 hover:text-slate-600">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 hover:text-slate-900">
+                    <input
+                      type="checkbox"
+                      checked={showBoundaries}
+                      onChange={(e) => setShowBoundaries(e.target.checked)}
+                      className="rounded text-[#0265D2]"
+                    />
+                    <span>Watershed Boundaries</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 hover:text-slate-900">
+                    <input
+                      type="checkbox"
+                      checked={showDrainage}
+                      onChange={(e) => setShowDrainage(e.target.checked)}
+                      className="rounded text-[#0265D2]"
+                    />
+                    <span>Stream Drainage Network</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 hover:text-slate-900">
+                    <input
+                      type="checkbox"
+                      checked={showInterventions}
+                      onChange={(e) => setShowInterventions(e.target.checked)}
+                      className="rounded text-[#0265D2]"
+                    />
+                    <span>Intervention Pins ({interventions.length})</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 hover:text-slate-900">
+                    <input
+                      type="checkbox"
+                      checked={showBuffers}
+                      onChange={(e) => setShowBuffers(e.target.checked)}
+                      className="rounded text-[#0265D2]"
+                    />
+                    <span>100m Catchment Buffers</span>
+                  </label>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Jump to Benchmark Region Dropdown */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setTeleportMenuOpen(!teleportMenuOpen)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-xs transition-colors"
+            >
+              <Navigation className="w-3.5 h-3.5 text-[#0E8A42]" />
+              <span>📍 Jump to Region</span>
+              <ChevronDown className="w-3 h-3 text-slate-400" />
+            </button>
+
+            {teleportMenuOpen && (
+              <div className="absolute left-0 mt-2 w-64 rounded-2xl bg-white border border-slate-200 shadow-2xl p-1.5 z-50 text-xs space-y-0.5 max-h-64 overflow-y-auto animate-in fade-in slide-in-from-top-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block px-2.5 py-1.5 border-b">
+                  National Watersheds
+                </span>
+                {benchmarkRegions.map((reg, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      if (leafletMap.current) {
+                        leafletMap.current.flyTo(reg.center, reg.zoom, { duration: 1.5 });
+                      }
+                      setTeleportMenuOpen(false);
+                    }}
+                    className="w-full text-left px-2.5 py-2 rounded-xl hover:bg-sky-50 hover:text-[#0265D2] text-slate-700 font-semibold transition-colors flex items-center justify-between"
+                  >
+                    <span>{reg.label}</span>
+                  </button>
+                ))}
+              </div>
             )}
           </div>
-          <button
-            type="submit"
-            disabled={isSearching}
-            className="ml-2 px-3 py-2 bg-[#0265D2] hover:bg-sky-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1 shadow-md transition-colors"
-          >
-            {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <span>Fly To</span>}
-          </button>
-        </form>
+        </div>
 
-        {/* Search Results Dropdown */}
-        {showSearchResults && searchResults.length > 0 && (
-          <div className="mt-1 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-2xl p-1 max-h-48 overflow-y-auto text-xs space-y-0.5">
-            {searchResults.map((r, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => flyToLocation(parseFloat(r.lat), parseFloat(r.lon), r.display_name)}
-                className="w-full text-left p-2 rounded-lg hover:bg-sky-50 text-slate-800 transition-colors flex items-start gap-2"
-              >
-                <MapPin className="w-3.5 h-3.5 text-[#0265D2] flex-shrink-0 mt-0.5" />
-                <span className="line-clamp-2 text-[11px] leading-snug">{r.display_name}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Top Right Zoom to Boundary Button */}
-      <button
-        onClick={fitToWatershed}
-        className="absolute top-4 right-14 z-20 p-2 rounded-xl bg-white/95 backdrop-blur-md border border-slate-200 shadow-lg text-slate-700 hover:text-forest-900 hover:bg-slate-50 transition-colors"
-        title="Fit Map to Watershed Boundary"
-      >
-        <Maximize2 className="w-4 h-4" />
-      </button>
-
-      {/* Floating GIS Vector Overlays & Controls */}
-      {showLayerControls && (
-        <div className="absolute top-16 left-4 z-20 bg-white/95 backdrop-blur-md rounded-xl p-3 border border-slate-200 shadow-xl text-xs space-y-2 max-w-[220px]">
-          <div className="flex items-center justify-between font-bold text-slate-800 border-b border-slate-100 pb-1.5">
-            <div className="flex items-center gap-1.5">
-              <Layers className="w-4 h-4 text-forest-800" />
-              <span>GIS Thematic Layers</span>
+        {/* Center: Real-World Search Bar (Outside the map!) */}
+        <div className="relative flex-1 max-w-md">
+          <form onSubmit={handleSearch} className="flex items-center gap-2">
+            <div className="relative w-full">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search any place in India / World..."
+                className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 text-xs bg-slate-50 focus:bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0265D2] transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => { setSearchQuery(''); setShowSearchResults(false); }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-          </div>
+            <button
+              type="submit"
+              disabled={isSearching}
+              className="px-3.5 py-2 bg-[#0265D2] hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 shadow-xs flex-shrink-0"
+            >
+              {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <span>Fly To</span>}
+            </button>
+          </form>
 
-          <label className="flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900">
-            <input
-              type="checkbox"
-              checked={showBoundaries}
-              onChange={(e) => setShowBoundaries(e.target.checked)}
-              className="rounded text-forest-900 focus:ring-forest-900"
-            />
-            <span>Watershed Boundary Polygon</span>
-          </label>
-
-          <label className="flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900">
-            <input
-              type="checkbox"
-              checked={showDrainage}
-              onChange={(e) => setShowDrainage(e.target.checked)}
-              className="rounded text-water-600 focus:ring-water-600"
-            />
-            <span>Drainage Network (DEM D8)</span>
-          </label>
-
-          <label className="flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900">
-            <input
-              type="checkbox"
-              checked={showInterventions}
-              onChange={(e) => setShowInterventions(e.target.checked)}
-              className="rounded text-forest-900 focus:ring-forest-900"
-            />
-            <span>Intervention Markers ({interventions.length})</span>
-          </label>
-
-          <label className="flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900">
-            <input
-              type="checkbox"
-              checked={showBuffers}
-              onChange={(e) => setShowBuffers(e.target.checked)}
-              className="rounded text-emerald-600 focus:ring-emerald-600"
-            />
-            <span>100m Catchment Buffers</span>
-          </label>
+          {/* Search Results Dropdown */}
+          {showSearchResults && searchResults.length > 0 && (
+            <div className="absolute left-0 right-0 mt-1 bg-white rounded-xl border border-slate-200 shadow-2xl p-1 z-50 max-h-48 overflow-y-auto text-xs space-y-0.5 animate-in fade-in slide-in-from-top-1">
+              {searchResults.map((r, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => flyToLocation(parseFloat(r.lat), parseFloat(r.lon), r.display_name)}
+                  className="w-full text-left p-2 rounded-lg hover:bg-sky-50 text-slate-800 transition-colors flex items-start gap-2"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#0265D2] flex-shrink-0 mt-0.5" />
+                  <span className="line-clamp-2 text-[11px] leading-snug">{r.display_name}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-      )}
 
-      {/* Floating Legend */}
-      <div className="absolute bottom-4 left-4 z-20 bg-white/95 backdrop-blur-md rounded-xl p-3 border border-slate-200 shadow-xl text-[11px] space-y-1.5 hidden lg:block">
-        <div className="font-bold text-slate-800 uppercase tracking-wider text-[10px] flex items-center justify-between gap-4">
-          <span>Signal Legend</span>
-          <span className="text-[9px] font-mono text-slate-400">Esri / Sentinel-2</span>
-        </div>
+        {/* Right: Reset Fit & Fullscreen Enhance Button */}
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#0E8A42] ring-1 ring-white" />
-          <span className="text-slate-700 font-medium">Observed Positive (Greening &gt; 0)</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#d97706] ring-1 ring-white" />
-          <span className="text-slate-700 font-medium">Needs Verification (GPS / Data Gap)</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#dc2626] ring-1 ring-white" />
-          <span className="text-slate-700 font-medium">Observed Negative / Stress</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#0284c7] ring-1 ring-white" />
-          <span className="text-slate-700 font-medium">Inconclusive (Marginal Delta)</span>
+          <button
+            type="button"
+            onClick={fitToWatershed}
+            className="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
+            title="Fit Map to Active Watershed"
+          >
+            <Compass className="w-3.5 h-3.5 text-slate-600" />
+            <span className="hidden sm:inline">Fit Boundary</span>
+          </button>
+
+          {/* Enhance & Open Fullscreen Button */}
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all ${
+              isFullscreen
+                ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                : 'bg-slate-900 hover:bg-slate-800 text-white'
+            }`}
+            title="Expand to Fullscreen on large monitor"
+          >
+            {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            <span>{isFullscreen ? 'Exit Fullscreen' : 'Enhance & Expand'}</span>
+          </button>
         </div>
       </div>
 
-      {/* National Benchmark Watershed Quick Teleporter */}
-      <div className="absolute bottom-4 right-4 z-20 max-w-[calc(100%-20px)] sm:max-w-[550px] flex items-center gap-1.5 overflow-x-auto p-1.5 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-xl">
-        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-1.5 flex items-center gap-1 whitespace-nowrap">
-          <Navigation className="w-3 h-3 text-[#0265D2]" />
-          <span>Teleport:</span>
-        </span>
-        {benchmarkRegions.map((reg, idx) => (
+      {/* 
+        CLEAN MAP CANVAS (100% clean view of satellite earth observation)
+      */}
+      <div 
+        className={`relative w-full rounded-2xl overflow-hidden border border-slate-200 shadow-md ${
+          isFullscreen ? 'flex-1 rounded-none border-none' : ''
+        }`} 
+        style={{ height: isFullscreen ? 'calc(100vh - 90px)' : height }}
+      >
+        {/* Leaflet Map DOM Element */}
+        <div ref={mapRef} className="w-full h-full z-0" />
+
+        {/* Floating Compact Signal Legend (Collapsible) */}
+        <div className="absolute bottom-4 left-4 z-20">
           <button
-            key={idx}
             type="button"
-            onClick={() => {
-              if (leafletMap.current) {
-                leafletMap.current.flyTo(reg.center, reg.zoom, { duration: 1.5 });
-              }
-            }}
-            className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-100 hover:bg-sky-50 hover:text-[#0265D2] text-slate-700 whitespace-nowrap transition-all border border-slate-200/60 shadow-xs"
+            onClick={() => setLegendOpen(!legendOpen)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/95 backdrop-blur-md rounded-xl border border-slate-200 shadow-lg text-[11px] font-bold text-slate-700 hover:bg-white transition-colors"
           >
-            {reg.label}
+            <Info className="w-3.5 h-3.5 text-[#0265D2]" />
+            <span>Signal Legend</span>
+            <ChevronDown className={`w-3 h-3 transition-transform ${legendOpen ? 'rotate-180' : ''}`} />
           </button>
-        ))}
+
+          {legendOpen && (
+            <div className="mt-1.5 bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-slate-200 shadow-2xl text-[11px] space-y-1.5 w-60 animate-in fade-in slide-in-from-bottom-2">
+              <div className="font-bold text-slate-800 uppercase tracking-wider text-[10px] flex items-center justify-between pb-1 border-b">
+                <span>Outcome Signals</span>
+                <span className="text-[9px] font-mono text-slate-400">Sentinel-2</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0E8A42] ring-1 ring-white" />
+                <span className="text-slate-700 font-medium">Observed Positive (Greening &gt; 0)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#d97706] ring-1 ring-white" />
+                <span className="text-slate-700 font-medium">Needs Verification (GPS Gap)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#dc2626] ring-1 ring-white" />
+                <span className="text-slate-700 font-medium">Observed Negative / Stress</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0284c7] ring-1 ring-white" />
+                <span className="text-slate-700 font-medium">Inconclusive (Marginal Delta)</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* If in Fullscreen Mode: Floating Exit Button in corner */}
+        {isFullscreen && (
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            className="absolute top-4 right-14 z-30 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-2xl flex items-center gap-1.5 transition-colors"
+          >
+            <X className="w-4 h-4" />
+            <span>Close Fullscreen</span>
+          </button>
+        )}
       </div>
     </div>
   );
