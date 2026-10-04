@@ -106,32 +106,32 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
         onClick={onClose} 
       />
 
-      <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
-        <div className="w-screen max-w-2xl bg-white shadow-2xl flex flex-col border-l border-slate-200 animate-in slide-in-from-right duration-300">
+      <div className="fixed inset-y-0 right-0 sm:pl-10 max-w-full flex">
+        <div className="w-screen max-w-full sm:max-w-xl md:max-w-2xl bg-white shadow-2xl flex flex-col border-l border-slate-200 animate-in slide-in-from-right duration-300">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-slate-900">{intervention.work_id}</h2>
+          <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between">
+            <div className="pr-2">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-sm sm:text-base font-bold text-slate-900">{intervention.work_id}</h2>
                 <Badge status={intervention.decision_status} />
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 line-clamp-1">
                 {intervention.structure_type} • {intervention.watershed_name || 'Watershed Unit'}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 transition-colors"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 transition-colors flex-shrink-0"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex border-b border-slate-200 px-6 bg-white">
+          <div className="flex border-b border-slate-200 px-2 sm:px-6 bg-white overflow-x-auto">
             <button
               onClick={() => setActiveTab('evidence')}
-              className={`py-3 px-4 text-xs font-semibold border-b-2 transition-all ${
+              className={`py-3 px-3 sm:px-4 text-xs font-semibold border-b-2 transition-all whitespace-nowrap ${
                 activeTab === 'evidence'
                   ? 'border-forest-900 text-forest-900'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
@@ -141,7 +141,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('satellite')}
-              className={`py-3 px-4 text-xs font-semibold border-b-2 transition-all ${
+              className={`py-3 px-3 sm:px-4 text-xs font-semibold border-b-2 transition-all whitespace-nowrap ${
                 activeTab === 'satellite'
                   ? 'border-forest-900 text-forest-900'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
@@ -151,7 +151,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
             </button>
             <button
               onClick={() => setActiveTab('scorecard')}
-              className={`py-3 px-4 text-xs font-semibold border-b-2 transition-all ${
+              className={`py-3 px-3 sm:px-4 text-xs font-semibold border-b-2 transition-all whitespace-nowrap ${
                 activeTab === 'scorecard'
                   ? 'border-forest-900 text-forest-900'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
@@ -162,7 +162,7 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
           </div>
 
           {/* Content Body */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 sm:space-y-6">
             {activeTab === 'evidence' && (
               <div className="space-y-6">
                 {/* Photo Display Card */}

@@ -120,8 +120,8 @@ export const InterventionsPage: React.FC = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <table className="w-full text-left text-xs">
+      <div className="bg-white rounded-2xl border border-slate-200 overflow-x-auto shadow-sm">
+        <table className="w-full text-left text-xs min-w-[680px]">
           <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider">
             <tr>
               <th className="p-4">Work ID</th>

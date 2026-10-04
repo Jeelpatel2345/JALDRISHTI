@@ -211,14 +211,14 @@ export const AnalyticsPage: React.FC = () => {
       </div>
 
       {/* Scenario Selector Tabs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
         {scenarios.map((sc) => {
           const isSelected = selectedScenarioId === sc.id;
           return (
             <button
               key={sc.id}
               onClick={() => setSelectedScenarioId(sc.id)}
-              className={`text-left p-3.5 rounded-2xl border transition-all flex flex-col justify-between ${
+              className={`text-left p-3 sm:p-3.5 rounded-2xl border transition-all flex flex-col justify-between ${
                 isSelected
                   ? 'bg-white border-[#0265D2] shadow-md ring-2 ring-[#0265D2]/20'
                   : 'bg-white/80 border-slate-200 hover:border-slate-300 hover:bg-white'
@@ -243,7 +243,7 @@ export const AnalyticsPage: React.FC = () => {
       </div>
 
       {/* Main Before vs After Showcase Canvas */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-md space-y-6">
+      <div className="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-md space-y-5 sm:space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
             <span className="text-xs font-mono font-bold text-[#0E8A42] bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
@@ -326,8 +326,8 @@ export const AnalyticsPage: React.FC = () => {
         )}
 
         {/* Quantitative Delta Metrics */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 pt-2">
+          <div className="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-200 space-y-1">
             <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">
               Biomass Recovery (ΔNDVI)
             </span>

@@ -420,13 +420,13 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
         {/* Left: Basemap Switcher + GIS Layers Dropdown + Benchmark Teleporter Dropdown */}
-        <div className="flex items-center flex-wrap gap-2">
+        <div className="flex items-center flex-wrap gap-1.5 sm:gap-2">
           {/* Basemap Segmented Toggle */}
           <div className="flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200">
             <button
               type="button"
               onClick={() => setBasemap('satellite')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 sm:gap-1.5 ${
                 basemap === 'satellite'
                   ? 'bg-[#0265D2] text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -439,7 +439,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             <button
               type="button"
               onClick={() => setBasemap('carto')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 sm:gap-1.5 ${
                 basemap === 'carto'
                   ? 'bg-[#0265D2] text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -447,12 +447,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
               title="Clean Government Vector Carto Basemap"
             >
               <MapIcon className="w-3.5 h-3.5" />
-              <span>Clean Map</span>
+              <span className="hidden xs:inline">Clean </span><span>Map</span>
             </button>
             <button
               type="button"
               onClick={() => setBasemap('topo')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 sm:gap-1.5 ${
                 basemap === 'topo'
                   ? 'bg-[#0265D2] text-white shadow-sm'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -470,10 +470,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
               <button
                 type="button"
                 onClick={() => setLayersMenuOpen(!layersMenuOpen)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-xs transition-colors"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] sm:text-xs font-bold shadow-xs transition-colors"
               >
                 <Layers className="w-3.5 h-3.5 text-[#0265D2]" />
-                <span>GIS Layers</span>
+                <span className="hidden xs:inline">GIS </span><span>Layers</span>
                 <ChevronDown className="w-3 h-3 text-slate-400" />
               </button>
 
@@ -564,7 +564,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         </div>
 
         {/* Center: Real-World Search Bar (Outside the map!) */}
-        <div className="relative flex-1 max-w-md">
+        <div className="relative w-full lg:flex-1 lg:max-w-md">
           <form onSubmit={handleSearch} className="flex items-center gap-2">
             <div className="relative w-full">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -588,7 +588,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             <button
               type="submit"
               disabled={isSearching}
-              className="px-3.5 py-2 bg-[#0265D2] hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 shadow-xs flex-shrink-0"
+              className="px-3 py-2 bg-[#0265D2] hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1 shadow-xs flex-shrink-0"
             >
               {isSearching ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <span>Fly To</span>}
             </button>
@@ -613,22 +613,23 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         </div>
 
         {/* Right: Reset Fit & Fullscreen Enhance Button */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 justify-end sm:justify-start">
           <button
             type="button"
             onClick={fitToWatershed}
-            className="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
+            className="px-2.5 sm:px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] sm:text-xs font-bold shadow-xs flex items-center gap-1.5 transition-colors"
             title="Fit Map to Active Watershed"
           >
             <Compass className="w-3.5 h-3.5 text-slate-600" />
             <span className="hidden sm:inline">Fit Boundary</span>
+            <span className="sm:hidden">Fit</span>
           </button>
 
           {/* Enhance & Open Fullscreen Button */}
           <button
             type="button"
             onClick={toggleFullscreen}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all ${
+            className={`px-3 sm:px-3.5 py-2 rounded-xl text-[11px] sm:text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all ${
               isFullscreen
                 ? 'bg-rose-600 hover:bg-rose-700 text-white'
                 : 'bg-slate-900 hover:bg-slate-800 text-white'
@@ -636,7 +637,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             title="Expand to Fullscreen on large monitor"
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
-            <span>{isFullscreen ? 'Exit Fullscreen' : 'Enhance & Expand'}</span>
+            <span className="hidden sm:inline">{isFullscreen ? 'Exit Fullscreen' : 'Enhance & Expand'}</span>
+            <span className="sm:hidden">{isFullscreen ? 'Exit' : 'Enhance'}</span>
           </button>
         </div>
       </div>

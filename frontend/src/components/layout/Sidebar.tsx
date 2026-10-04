@@ -7,7 +7,12 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const Sidebar: React.FC = () => {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onCloseMobile }) => {
   const { role } = useAuth();
 
   const navItems = [
@@ -25,8 +30,8 @@ export const Sidebar: React.FC = () => {
     { to: '/settings', icon: Settings, label: 'System Settings' },
   ];
 
-  return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 select-none">
+  const renderNavContent = () => (
+    <>
       {/* Navigation Group */}
       <div className="p-3 flex-1 overflow-y-auto space-y-1">
         <div className="px-3 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -39,6 +44,7 @@ export const Sidebar: React.FC = () => {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={() => onCloseMobile?.()}
               className={({ isActive }) =>
                 `flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
                   isActive
@@ -83,6 +89,48 @@ export const Sidebar: React.FC = () => {
           </p>
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* 1. Desktop & Tablet Fixed Sidebar (Hidden on < lg) */}
+      <aside className="hidden lg:flex w-64 bg-white border-r border-slate-200 flex-col flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 select-none">
+        {renderNavContent()}
+      </aside>
+
+      {/* 2. Mobile / Tablet Slide-over Drawer (Shown on < lg when mobileOpen is true) */}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+            onClick={onCloseMobile}
+          />
+
+          {/* Drawer Canvas */}
+          <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white shadow-2xl z-10 animate-in slide-in-from-left duration-250">
+            <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+              <div className="flex items-center gap-2.5">
+                <img src="/logo.png" alt="Logo" className="w-8 h-8 object-contain" />
+                <span className="font-extrabold text-sm text-slate-900 flex items-center">
+                  <span className="text-[#0265D2]">JAL</span>
+                  <span className="text-[#0E8A42]">DRISHTI</span>
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={onCloseMobile}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/50"
+              >
+                <span className="sr-only">Close menu</span>
+                ✕
+              </button>
+            </div>
+            {renderNavContent()}
+          </div>
+        </div>
+      )}
+    </>
   );
 };

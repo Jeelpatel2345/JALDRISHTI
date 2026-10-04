@@ -116,31 +116,31 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900/95 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] flex flex-col justify-center py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-900/95 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] flex flex-col justify-center py-6 sm:py-10 px-3 sm:px-6 lg:px-8">
       {/* Brand & Emblem Header */}
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-3">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-2.5 sm:space-y-3">
         <div className="relative inline-block">
           <img
             src="/logo.png"
             alt="JALDRISHTI Emblem"
-            className="w-20 h-20 object-contain mx-auto drop-shadow-[0_10px_20px_rgba(2,101,210,0.3)] animate-fade-in"
+            className="w-16 h-16 sm:w-20 sm:h-20 object-contain mx-auto drop-shadow-[0_10px_20px_rgba(2,101,210,0.3)] animate-fade-in"
           />
         </div>
         <div>
-          <h2 className="text-2xl font-black text-white tracking-tight flex items-center justify-center gap-1.5">
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center justify-center gap-1.5">
             <span className="text-[#38bdf8]">JAL</span>
             <span className="text-[#4ade80]">DRISHTI</span>
           </h2>
-          <p className="text-xs text-slate-300 font-medium mt-1">
+          <p className="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">
             Department of Land Resources (DoLR) • WDC-PMKSY 2.0
           </p>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[10px] sm:text-[11px] text-slate-400">
             National Geospatial Watershed Intelligence & Evidence Grid
           </p>
         </div>
 
         {/* Database Status Indicator */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[11px] text-slate-300">
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] sm:text-[11px] text-slate-300">
           <Database className="w-3.5 h-3.5 text-[#38bdf8]" />
           <span>Storage Engine:</span>
           {isSupabaseLive ? (
@@ -158,35 +158,35 @@ export const LoginPage: React.FC = () => {
       </div>
 
       {/* Main Container Card */}
-      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-lg">
+      <div className="mt-5 sm:mt-6 sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
           {/* Navigation Tabs */}
-          <div className="flex border-b border-slate-200 bg-slate-50 text-xs font-bold text-slate-600">
+          <div className="flex border-b border-slate-200 bg-slate-50 text-[11px] sm:text-xs font-bold text-slate-600">
             <button
               onClick={() => setActiveTab('signin')}
-              className={`flex-1 py-3.5 text-center transition-colors flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-3 text-center transition-colors flex items-center justify-center gap-1 sm:gap-1.5 ${
                 activeTab === 'signin'
                   ? 'bg-white text-[#0265D2] border-b-2 border-[#0265D2]'
                   : 'hover:text-slate-900 hover:bg-slate-100/60'
               }`}
             >
               <Lock className="w-3.5 h-3.5" />
-              <span>Officer Sign In</span>
+              <span className="hidden xs:inline">Officer </span><span>Sign In</span>
             </button>
             <button
               onClick={() => setActiveTab('register')}
-              className={`flex-1 py-3.5 text-center transition-colors flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-3 text-center transition-colors flex items-center justify-center gap-1 sm:gap-1.5 ${
                 activeTab === 'register'
                   ? 'bg-white text-[#0265D2] border-b-2 border-[#0265D2]'
                   : 'hover:text-slate-900 hover:bg-slate-100/60'
               }`}
             >
               <UserIcon className="w-3.5 h-3.5" />
-              <span>Register Clearance</span>
+              <span className="hidden xs:inline">Register </span><span>Clearance</span>
             </button>
             <button
               onClick={() => setActiveTab('personas')}
-              className={`flex-1 py-3.5 text-center transition-colors flex items-center justify-center gap-1.5 ${
+              className={`flex-1 py-3 text-center transition-colors flex items-center justify-center gap-1 sm:gap-1.5 ${
                 activeTab === 'personas'
                   ? 'bg-white text-[#0265D2] border-b-2 border-[#0265D2]'
                   : 'hover:text-slate-900 hover:bg-slate-100/60'
@@ -197,7 +197,7 @@ export const LoginPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="p-4 sm:p-6 sm:p-8">
             {/* TAB 1: STANDARD SIGN IN */}
             {activeTab === 'signin' && (
               <form onSubmit={handleStandardLogin} className="space-y-4 text-xs">
