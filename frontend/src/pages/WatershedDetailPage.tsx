@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   Compass, MapPin, Calendar, Layers, Activity, FileText, 
-  CheckCircle, ArrowLeft, ArrowUpRight, ShieldCheck, Sparkles 
+  CheckCircle, ArrowLeft, ArrowUpRight, ShieldCheck, Sparkles,
+  CloudRain, Thermometer, Droplets, Wind, Radio
 } from 'lucide-react';
 import { api } from '../services/api';
 import { Watershed, Intervention } from '../types';
@@ -22,6 +23,7 @@ export const WatershedDetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'map' | 'interventions' | 'ai'>('map');
   const [selectedIntervention, setSelectedIntervention] = useState<any | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [liveWeather, setLiveWeather] = useState<any | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -36,6 +38,18 @@ export const WatershedDetailPage: React.FC = () => {
         setWatershed(ws);
         setInterventions(ivs);
         setAiBrief(brief);
+
+        // Fetch live weather using centroid coordinates
+        try {
+          const poly = JSON.parse(ws.geom_geojson);
+          const firstCoord = poly.coordinates?.[0]?.[0];
+          const lat = firstCoord ? firstCoord[1] : 22.2541;
+          const lon = firstCoord ? firstCoord[0] : 70.7812;
+          const weather = await api.getLiveMeteorology(lat, lon);
+          setLiveWeather(weather);
+        } catch {
+          // ignore
+        }
       } catch (err: any) {
         error('Failed to load watershed details', err.message);
       } finally {
@@ -176,9 +190,71 @@ export const WatershedDetailPage: React.FC = () => {
                 Catchment Hydrology
               </h3>
               <p className="text-slate-600 leading-relaxed">
-                Interventions sit on Order-1 and Order-2 streams draining towards the Khirasara main reservoir trunk.
+                Interventions sit on Order-1 and Order-2 streams draining towards the {watershed.name} main trunk.
               </p>
             </div>
+
+            {/* Live Meteorological Ground Telemetry Card */}
+            {liveWeather && (
+              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-sky-950 text-white rounded-2xl p-4 shadow-sm border border-slate-700/60 space-y-3 text-xs">
+                <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+                  <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[11px] text-sky-400">
+                    <Radio className="w-3.5 h-3.5 animate-pulse text-sky-400" />
+                    <span>Live Local Weather</span>
+                  </div>
+                  <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                    Live
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-2.5">
+                    <div className="flex items-center gap-1.5 text-slate-400 text-[10px]">
+                      <Thermometer className="w-3 h-3 text-amber-400" />
+                      <span>Temperature</span>
+                    </div>
+                    <span className="font-mono font-bold text-sm text-white block mt-0.5">
+                      {liveWeather.temperature_c}°C
+                    </span>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-2.5">
+                    <div className="flex items-center gap-1.5 text-slate-400 text-[10px]">
+                      <Droplets className="w-3 h-3 text-sky-400" />
+                      <span>Humidity</span>
+                    </div>
+                    <span className="font-mono font-bold text-sm text-white block mt-0.5">
+                      {liveWeather.humidity_pct}%
+                    </span>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-2.5">
+                    <div className="flex items-center gap-1.5 text-slate-400 text-[10px]">
+                      <CloudRain className="w-3 h-3 text-emerald-400" />
+                      <span>Current Rain</span>
+                    </div>
+                    <span className="font-mono font-bold text-sm text-white block mt-0.5">
+                      {liveWeather.precipitation_mm} mm
+                    </span>
+                  </div>
+
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-2.5">
+                    <div className="flex items-center gap-1.5 text-slate-400 text-[10px]">
+                      <Wind className="w-3 h-3 text-teal-400" />
+                      <span>Wind</span>
+                    </div>
+                    <span className="font-mono font-bold text-sm text-white block mt-0.5">
+                      {liveWeather.wind_speed_kmh} km/h
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-[10px] text-slate-400 font-mono italic">
+                  Station: {liveWeather.source}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { 
   Compass, Layers, Camera, CheckSquare, ShieldAlert, 
-  Activity, ArrowRight, RefreshCw, AlertTriangle, ChevronRight
+  Activity, ArrowRight, RefreshCw, AlertTriangle, ChevronRight,
+  CloudRain, Thermometer, Droplets, Wind, Radio
 } from 'lucide-react';
 import { StatCard } from '../components/common/StatCard';
 import { MapContainer } from '../components/gis/MapContainer';
@@ -20,18 +21,21 @@ export const DashboardPage: React.FC = () => {
   const [interventions, setInterventions] = useState<Intervention[]>([]);
   const [selectedIntervention, setSelectedIntervention] = useState<any | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [liveWeather, setLiveWeather] = useState<any | null>(null);
 
   const loadData = async () => {
     setLoading(true);
     try {
-      const [ovData, wsData, ivData] = await Promise.all([
+      const [ovData, wsData, ivData, weatherData] = await Promise.all([
         api.getDashboardOverview(),
         api.getWatersheds(),
-        api.getInterventions()
+        api.getInterventions(),
+        api.getLiveMeteorology(22.2541, 70.7812)
       ]);
       setOverview(ovData);
       setWatersheds(wsData);
       setInterventions(ivData);
+      setLiveWeather(weatherData);
     } catch (err: any) {
       error('Failed to load dashboard overview', err.message);
     } finally {
@@ -121,6 +125,65 @@ export const DashboardPage: React.FC = () => {
           colorScheme="amber"
         />
       </div>
+
+      {/* Real-World Live Meteorological Telemetry Strip */}
+      {liveWeather && (
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-sky-950 text-white rounded-2xl p-4 shadow-md border border-slate-700/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400">
+              <Radio className="w-5 h-5 animate-pulse" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
+                  Live Meteorological Feed
+                </span>
+                <span className="text-[10px] font-mono bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  Real-time Ground Truth
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 mt-0.5">
+                Active Benchmark: Khirasara Basin (22.25°N, 70.78°E) • Station telemetry linked
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 flex items-center gap-2.5">
+              <Thermometer className="w-4 h-4 text-amber-400 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-medium">Ambient Temp</span>
+                <span className="font-mono font-bold text-white text-sm">{liveWeather.temperature_c}°C</span>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 flex items-center gap-2.5">
+              <Droplets className="w-4 h-4 text-sky-400 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-medium">Humidity</span>
+                <span className="font-mono font-bold text-white text-sm">{liveWeather.humidity_pct}%</span>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 flex items-center gap-2.5">
+              <CloudRain className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-medium">Current Rain</span>
+                <span className="font-mono font-bold text-white text-sm">{liveWeather.precipitation_mm} mm</span>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 flex items-center gap-2.5">
+              <Wind className="w-4 h-4 text-teal-400 flex-shrink-0" />
+              <div>
+                <span className="text-[10px] text-slate-400 block font-medium">Wind Speed</span>
+                <span className="font-mono font-bold text-white text-sm">{liveWeather.wind_speed_kmh} km/h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Center Grid: Map & Priority Triage Drawer */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">

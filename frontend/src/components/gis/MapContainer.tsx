@@ -357,7 +357,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       const popupContent = `
         <div style="font-family: 'Inter', sans-serif; padding: 2px; min-width: 230px;">
           <div style="border-radius: 8px; overflow: hidden; height: 110px; margin-bottom: 8px; position: relative; background: #0f172a; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-            <img src="${getMarkerThumbnail(iv.structure_type)}" style="width: 100%; height: 100%; object-fit: cover;" alt="${iv.structure_type}" />
+            <img src="${getMarkerThumbnail(iv.structure_type)}" onerror="this.src='/images/real/check_dam.jpg'" style="width: 100%; height: 100%; object-fit: cover;" alt="${iv.structure_type}" />
             <span style="position: absolute; bottom: 6px; left: 6px; background: rgba(15,23,42,0.85); color: #ffffff; font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);">
               ${iv.structure_type}
             </span>

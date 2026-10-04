@@ -31,6 +31,11 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   title = '24-Month Multi-Spectral Index & Rainfall Trajectory',
   showRainfall = true
 }) => {
+  const chartData = (data || []).map((d) => ({
+    ...d,
+    date: d.date || d.month || ''
+  }));
+
   return (
     <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
       <div className="flex items-center justify-between">
@@ -40,7 +45,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
 
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer>
-          <ComposedChart data={data} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+          <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
             <XAxis 
               dataKey="date" 
